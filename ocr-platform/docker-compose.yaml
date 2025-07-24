@@ -1,0 +1,59 @@
+services:
+  django:
+    build:
+      context: ./django-frontend
+    command: python manage.py runserver 0.0.0.0:8001
+    volumes:
+      - ./django-frontend:/app
+      - media:/app/media
+    ports:
+      - "8001:8001"
+    env_file:
+      - .env
+    depends_on:
+      - db
+      - fastapi
+
+  fastapi:
+    build:
+      context: ./fastapi-backend
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000
+    volumes:
+      - ./fastapi-backend/app:/app/app
+      - ./fastapi-backend/documents:/app/documents
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      - db
+      - redis
+
+  celery:
+    build:
+      context: ./fastapi-backend
+    command: celery -A app.tasks worker --loglevel=info --pool=solo -Q ocr_queue
+    volumes:
+      - ./fastapi-backend/app:/app/app
+      - ./fastapi-backend/documents:/app/documents
+    env_file:
+      - .env
+    depends_on:
+      - db
+      - redis
+
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: document_ocr
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7
+
+volumes:
+  postgres_data:
+  media:

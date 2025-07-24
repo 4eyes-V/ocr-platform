@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h3 class="text-center">Analysis Started</h3>
+            </div>
+            <div class="card-body text-center">
+                <div class="mb-4">
+                    <img src="{{ doc.file_path.url }}" alt="{{ doc.file_path.name }}" class="img-fluid" style="max-height: 300px;">
+                </div>
+                <h4>Document: {{ doc.file_path.name }}</h4>
+                <p class="lead">Your document has been sent for OCR processing</p>
+                <p>Task ID: <code>{{ task_id }}</code></p>
+                <p>You can check the status later using the task ID.</p>
+                <a href="{% url 'home' %}" class="btn btn-primary">Back to Gallery</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

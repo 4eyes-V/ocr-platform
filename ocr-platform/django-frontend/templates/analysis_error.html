@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-danger text-white">
+                <h3 class="text-center">Analysis Error</h3>
+            </div>
+            <div class="card-body text-center">
+                <div class="mb-4">
+                    <img src="{{ doc.file_path.url }}" alt="{{ doc.file_path.name }}" class="img-fluid" style="max-height: 300px;">
+                </div>
+                <h4>Document: {{ doc.file_path.name }}</h4>
+                <p class="lead text-danger">There was an error processing your document</p>
+                <p>Please try again later or contact support if the problem persists.</p>
+                <div class="d-flex justify-content-center gap-2">
+                    <a href="{% url 'home' %}" class="btn btn-outline-secondary">Back to Gallery</a>
+                    <a href="{% url 'analyze' doc.id %}" class="btn btn-primary">Try Again</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
